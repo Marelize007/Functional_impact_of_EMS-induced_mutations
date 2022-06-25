@@ -5,7 +5,7 @@ count_matrix <- read.delim("file.matrix", header=T, sep="\t", row.names=1)
 
 sample_matrix <- DESeqDataSetFromMatrix(countData = count_matrix,
                                          colData = sample_file,
-                                         design = ~ Condition)
+                                         design = ~ genotype)
 
 sample_matrix$Stage <- relevel(sample_matrix$Stage, ref = "WT")
 

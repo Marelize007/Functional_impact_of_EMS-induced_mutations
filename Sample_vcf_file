@@ -1,0 +1,73 @@
+The following is an example of the VCF file that serves as an input file for the custom python script. This file contains 10 treatment lines (AR_10_1 to AR_25_G3) all from the AroMoose (AR) isolate.
+Depending on the number of samples in the VCF file, one will need to adjust the "sample_column_list" in line 12 of the custom python script by adding the column number for each sample.
+The column number for the sample to be tested will be added to "column_of_interest" in line 13 of the custom python script. 
+
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##bcftoolsVersion=1.10+htslib-1.10
+##bcftoolsCommand=mpileup -Ou -f lk16_hiC_chromosomes.fa -a INFO/AD,FORMAT/AD,FORMAT/DP,FORMAT/ADF,FORMAT/ADR,FORMAT/SP,FORMAT/SCR AR_10_1.sort.dedup_unique.bam AR_10_2.sort.dedup_unique.bam AR_10_G1.sort.dedup_unique.bam AR_10_G2.sort.dedup_unique.bam AR_10_G3.sort.dedup_unique.bam AR_25_1.sort.dedup_unique.bam AR_25_2.sort.dedup_unique.bam AR_25_G1.sort.dedup_unique.bam AR_25_G2.sort.dedup_unique.bam AR_25_G3.sort.dedup_unique.bam
+##reference=file:///lk16_hiC_chromosomes.fa
+##contig=<ID=1,length=21059322>
+##contig=<ID=2,length=16561929>
+##contig=<ID=3,length=16371419>
+##contig=<ID=4,length=15814727>
+##contig=<ID=5,length=15364058>
+##contig=<ID=6,length=15236017>
+##contig=<ID=7,length=14077913>
+##contig=<ID=8,length=11861019>
+##contig=<ID=9,length=10884426>
+##contig=<ID=10,length=9906021>
+##contig=<ID=11,length=9655460>
+##contig=<ID=12,length=8208898>
+##ALT=<ID=*,Description="Represents allele(s) other than observed.">
+##INFO=<ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL.">
+##INFO=<ID=IDV,Number=1,Type=Integer,Description="Maximum number of raw reads supporting an indel">
+##INFO=<ID=IMF,Number=1,Type=Float,Description="Maximum fraction of raw reads supporting an indel">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Raw read depth">
+##INFO=<ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3">
+##INFO=<ID=RPB,Number=1,Type=Float,Description="Mann-Whitney U test of Read Position Bias (bigger is better)">
+##INFO=<ID=MQB,Number=1,Type=Float,Description="Mann-Whitney U test of Mapping Quality Bias (bigger is better)">
+##INFO=<ID=BQB,Number=1,Type=Float,Description="Mann-Whitney U test of Base Quality Bias (bigger is better)">
+##INFO=<ID=MQSB,Number=1,Type=Float,Description="Mann-Whitney U test of Mapping Quality vs Strand Bias (bigger is better)">
+##INFO=<ID=SGB,Number=1,Type=Float,Description="Segregation based metric.">
+##INFO=<ID=MQ0F,Number=1,Type=Float,Description="Fraction of MQ0 reads (smaller is better)">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Number of high-quality bases">
+##FORMAT=<ID=SP,Number=1,Type=Integer,Description="Phred-scaled strand bias P-value">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths (high-quality bases)">
+##FORMAT=<ID=ADF,Number=R,Type=Integer,Description="Allelic depths on the forward strand (high-quality bases)">
+##FORMAT=<ID=ADR,Number=R,Type=Integer,Description="Allelic depths on the reverse strand (high-quality bases)">
+##INFO=<ID=AD,Number=R,Type=Integer,Description="Total allelic depths (high-quality bases)">
+##FORMAT=<ID=SCR,Number=1,Type=Integer,Description="Per-sample number of soft-clipped reads (at high-quality bases)">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=ICB,Number=1,Type=Float,Description="Inbreeding Coefficient Binomial test (bigger is better)">
+##INFO=<ID=HOB,Number=1,Type=Float,Description="Bias in the number of HOMs number (smaller is better)">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele, in the same order as listed">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases">
+##INFO=<ID=MQ,Number=1,Type=Integer,Description="Average mapping quality">
+##bcftools_callVersion=1.10+htslib-1.10
+##bcftools_callCommand=call -vmO z -o AR_consensus_final.vcf.gz; Date=Sun Aug 30 09:38:19 2020
+##bcftools_filterVersion=1.2+htslib-1.2.1
+##bcftools_filterCommand=filter -S . -i 'QUAL>=20 & FORMAT/DP>=10' -Ov -o AR_consensus_old_f1.vcf AR_consensus_final.vcf
+##FILTER=<ID=SnpGap,Description="SNP within 50 bp of an indel">
+##bcftools_filterCommand=filter -g 50 -Ov -o AR_consensus_old_f2.vcf AR_consensus_old_f1.vcf
+##bcftools_viewVersion=1.2+htslib-1.2.1
+##bcftools_viewCommand=view -m 2 -v snps -i INFO/AC>=1 -Ov -o AR_consensus_old_f3.vcf AR_consensus_old_f2.vcf
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  AR_10_1   AR_10_2   AR_10_G1   AR_10_G2  AR_10_G3  AR_25_1  AR_25_2   AR_25_G1  AR_25_G2  AR_25_G3
+1       4476247 .       G       A       180     PASS    DP=456;AD=423,15;VDB=0.267433;SGB=15.313;RPB=0.351362;MQB=1;MQSB=1;BQB=0.537612;MQ0F=0;ICB=0.0104972;HOB=0.005;AC=1;AN=20;DP4=230,193,1
+0,6;MQ=60        GT:PL:DP:SP:ADF:ADR:AD:SCR      0/1:219,0,255:47:3:15,9:17,6:32,15:1    0/0:0,114,255:38:0:19,0:19,0:38,0:1     0/0:0,126,255:43:0:22,0:20,0:42,0:0     0/0:0,151,255:50:0:25,
+0:25,0:50,0:3     0/0:0,160,255:53:0:32,0:21,0:53,0:0     0/0:0,135,255:45:0:21,0:24,0:45,0:0     0/0:0,138,255:46:0:27,0:19,0:46,0:2     0/0:0,108,255:36:0:24,0:12,0:36,0:4     0/0:0,129,255
+:43:0:21,0:22,0:43,0:2     0/0:0,114,255:38:0:24,0:14,0:38,0:0
+1       11358845        .       G       A       217     PASS    DP=212;AD=186,14;VDB=0.806879;SGB=28.9594;RPB=0.248513;MQB=1;MQSB=1;BQB=0.99821;MQ0F=0;ICB=0.0104972;HOB=0.005;AC=1;AN=20;DP4=9
+1,95,7,7;MQ=60   GT:PL:DP:SP:ADF:ADR:AD:SCR      0/1:255,0,187:24:7:2,7:8,7:10,14:1      0/0:0,54,255:18:0:10,0:8,0:18,0:0       0/0:0,63,255:21:0:13,0:8,0:21,0:0       0/0:0,81,255:27:0:14,0
+:13,0:27,0:0      0/0:0,51,255:17:0:11,0:6,0:17,0:1       0/0:0,51,255:17:0:10,0:7,0:17,0:1       0/0:0,51,255:17:0:7,0:10,0:17,0:0       0/0:0,39,255:13:0:4,0:9,0:13,0:0        0/0:0,69,255:
+23:0:9,0:14,0:23,0:0       0/0:0,69,255:23:0:11,0:12,0:23,0:0
+1       14115631        .       C       T       105     PASS    DP=230;AD=216,7;VDB=0.139238;SGB=12.8449;RPB=0.956678;MQB=1;MQSB=1;BQB=0.821045;MQ0F=0;ICB=0.0104972;HOB=0.005;AC=1;AN=20;DP4=1
+14,102,2,5;MQ=60 GT:PL:DP:SP:ADF:ADR:AD:SCR      0/1:144,0,255:20:2:6,2:7,5:13,7:0       0/0:0,75,255:25:0:14,0:11,0:25,0:0      0/0:0,60,255:20:0:12,0:8,0:20,0:0       0/0:0,63,255:21:0:18,0
+:3,0:21,0:0       0/0:0,75,255:25:0:11,0:14,0:25,0:0      0/0:0,66,255:22:0:9,0:13,0:22,0:0       0/0:0,69,255:23:0:12,0:11,0:23,0:0      0/0:0,48,255:16:0:7,0:9,0:16,0:0        0/0:0,78,255:
+26:0:10,0:16,0:26,0:0      0/0:0,75,255:25:0:15,0:10,0:25,0:0
+1       16932303        .       G       T       217     PASS    DP=273;AD=240,16;VDB=0.0692662;SGB=33.5644;RPB=0.854197;MQB=1;MQSB=1;BQB=0.996504;MQ0F=0;ICB=0.0104972;HOB=0.005;AC=1;AN=20;DP4
+=138,102,12,4;MQ=60      GT:PL:DP:SP:ADF:ADR:AD:SCR      0/1:255,0,248:29:0:9,12:4,4:13,16:0     0/0:0,75,255:25:0:14,0:11,0:25,0:2      0/0:0,90,255:30:0:17,0:13,0:30,0:2      0/0:0,75,255:2
+5:0:19,0:6,0:25,0:0       0/0:0,90,255:30:0:19,0:11,0:30,0:1      0/0:0,81,255:27:0:15,0:12,0:27,0:0      0/0:0,66,255:22:0:12,0:10,0:22,0:0      0/0:0,81,255:27:0:14,0:13,0:27,0:1      0/0:0
+,66,255:22:0:10,0:12,0:22,0:0      0/0:0,57,255:19:0:9,0:10,0:19,0:0

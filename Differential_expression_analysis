@@ -1,0 +1,30 @@
+## Differential expression analysis
+
+
+count_matrix <- read.delim("file.matrix", header=T, sep="\t", row.names=1)
+
+sample_matrix <- DESeqDataSetFromMatrix(countData = count_matrix,
+                                         colData = sample_file,
+                                         design = ~ Condition)
+
+sample_matrix$Stage <- relevel(sample_matrix$Stage, ref = "WT")
+
+sample_matrix_2 <- DESeq(sample_matrix)
+
+norm_counts <- log2(counts(sample_matrix_2, normalized = TRUE)+1)
+write.table(norm_counts, "normalized_counts.txt", quote=F, col.names=T, row.names=T, sep="\t")
+
+rlog <- rlog(sample_matrix_2)
+sampleDists <- dist(t(assay(rlog)))
+
+resultsNames(sample_matrix_2)
+de <- results(object = sample_matrix_2,
+              name="Condition_WT_vs_EMS")
+
+de_shrink <- lfcShrink(dds = sample_matrix_2,
+                       coef="Condition_WT_vs_EMS",
+                       type="apeglm")
+
+head(de)
+head(de_shrink)
+write.table(de_shrink, "deseq2_results.txt", quote=F, col.names=T, row.names=T, sep="\t")

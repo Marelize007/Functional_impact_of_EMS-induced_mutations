@@ -1,0 +1,5 @@
+# Input file is the filtered mutations to be annotated.
+# Output file is the functionally annotated mutations. 
+# For more information on SNPEff please see https://pcingola.github.io/SnpEff/.
+
+java -Xmx4g -jar snpEff.jar -v -cancer -cancerSamples untreated_treated_samples.txt ref_genome input.vcf  > annotated_output.vcf

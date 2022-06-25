@@ -11,7 +11,7 @@ samtools view -h input.bam | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b -o
 The mpileup and call functions of BCFtools (Li, 2011) along with default parameters were used to generate genotype likelihoods and genotype calls in a VCF file containing all EMS mutant lines derived from each natural Daphnia isolate. We added the following FORMAT and INFO tags to the VCF file: AD (allelic depth), DP (number of high-quality bases), ADF (allelic depth on forward strand) and ADR (allelic depth on reverse strand). For this study only biallelic single nucleotide polymorphisms (SNPs) that met the following filter parameters were used: Quality score (QUAL) >= 20, Sequencing depth (DP) >= 10, Distance >= 50 bp from an indel. Indels were not examined in this study and were also filtered out. An examle output file, output_file.vcf, can be viewed in this repository.
 bcftools mpileup -Ou -f reference_genome.fa -a INFO/AD,FORMAT/AD,FORMAT/DP,FORMAT/ADF,FORMAT/ADR,FORMAT/SP,FORMAT/SCR input_file_1.bam input_file_2.bam input_file_3.bam | bcftools call --threads xx -mO z -o output_file.vcf.gz
 
-bcftools filter -S . -i 'QUAL>=20 & FORMAT/DP>=10' input.vcf -Ov -o output.vcf ## Quality and depth filter
+bcftools filter -S . -i 'QUAL>=20 & FORMAT/DP>=10 & FORMAT/DP<=60' input.vcf -Ov -o output.vcf ## Quality and depth filter
 
 bcftools filter -g 50 input.vcf -Ov -o output.vcf ## Indel filter
 
